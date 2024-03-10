@@ -21,24 +21,36 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/api/scraping", async (req, res) => {
-  const data = req.body;
-  console.log("Body", { data });
-  const browser = await puppeteer.launch({
-    headless: false,
-  });
-  const page = await browser.newPage();
-  await page.setViewport({ width: 1024, height: 738 });
+  try {
+    const data = req.body;
+    console.log("Body", { data });
+    const browser = await puppeteer.launch({
+      headless: false,
+      defaultViewport: {
+        deviceScaleFactor: 1,
+        hasTouch: false,
+        height: 1080,
+        isLandscape: true,
+        isMobile: false,
+        width: 1920,
+      },
+    });
+    const page = await browser.newPage();
 
-  await page.goto(data.url);
+    await page.goto(data.url);
 
-  await page.waitForSelector("body");
+    await page.waitForSelector("body");
 
-  const elementText = await page.$eval("body", (el) => el.innerHTML);
+    const elementText = await page.$eval("body", (el) => el.innerHTML);
 
-  await browser.close();
-  res
-    .send({ message: `Success go to: ${data.url}`, content: elementText })
-    .status(200);
+    await browser.close();
+    res
+      .send({ message: `Success go to: ${data.url}`, content: elementText })
+      .status(200);
+  } catch (e: any) {
+    console.log("Error:", e);
+    res.send({ message: "error", errorMessage: e.message }).status(500);
+  }
 });
 app.use(router);
 
