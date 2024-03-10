@@ -3,6 +3,6 @@
  * Only import and export default main entry (ROOT_DIR/index.ts)
  */
 
-import main from "@/index";
+import app from "../index";
 
-export default main;
+export default app;
