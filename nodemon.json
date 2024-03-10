@@ -1,0 +1,4 @@
+{
+  "ext": ".ts,.js",
+  "exec": "ts-node -r tsconfig-paths/register -r ./index.ts"
+}
