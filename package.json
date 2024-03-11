@@ -8,7 +8,8 @@
     "start": "npx ts-node -r tsconfig-paths/register -r ./index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "vercel-build": "echo \"Builded\""
+    "vercel-build": "echo \"Builded\"",
+    "vercel-install": "npm i && cp -r cache public"
   },
   "repository": {
     "type": "git",
