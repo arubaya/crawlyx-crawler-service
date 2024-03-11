@@ -2,7 +2,6 @@ import express from "express";
 import http from "http";
 import dotenv from "dotenv";
 import puppeteer from "puppeteer";
-import { readdirSync } from "fs";
 
 /**
  * NodeJs server initialization
@@ -46,21 +45,17 @@ router.post("/api/scraping", async (req, res) => {
 
     await browser.close();
     res
-      .send({ message: `Success go to: ${data.url}`, content: elementText })
+      .send({
+        message: `Success go to: ${data.url}`,
+        content: elementText,
+      })
       .status(200);
   } catch (e: any) {
     console.log("Error:", e);
-    const workingDir = process.cwd();
-    const fileDir = readdirSync(workingDir, { withFileTypes: true })
-      .filter((dirent) => dirent.isDirectory())
-      .map((dirent) => dirent.name);
     res
       .send({
         message: "error",
         errorMessage: e.message,
-        platform: process.platform,
-        workingDir,
-        fileDir,
       })
       .status(500);
   }
