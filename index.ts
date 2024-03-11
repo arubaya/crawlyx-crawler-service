@@ -2,12 +2,15 @@ import express from "express";
 import http from "http";
 import dotenv from "dotenv";
 import puppeteer from "puppeteer";
+import ngrok from "@ngrok/ngrok";
 
 /**
  * NodeJs server initialization
  */
 dotenv.config(); // Used for init env
 const PORT = process.env.PORT || 8080; // Set server PORT, default 8080
+const ENVIRONTMENT = process.env.NODE_ENV || "development"; // Set server ENV, default development
+const NGROK_DOMAIN = process.env.NGROK_DOMAIN || ""; // Set server NGROK DOMAIN, default ''
 const app = express(); // Init expressJs
 const server = http.createServer(app); // Create http server, if want to use https you need config
 const router = express.Router(); // init server router
@@ -66,5 +69,14 @@ app.use(router);
  * Server listener
  */
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+if (ENVIRONTMENT === "development") {
+  // Get your endpoint online
+  ngrok
+    .connect({ addr: PORT, authtoken_from_env: true, domain: NGROK_DOMAIN })
+    .then((listener) =>
+      console.log(`Ingress established at: ${listener.url()}`)
+    );
+}
 
 export default app;
